@@ -1,18 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class JoystickInput : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class JoystickInput : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
-    public RectTransform joystickBackground;
-    public RectTransform joystickHandle;
-
-    public PlayerMovement playerMovement;
+    public RectTransform background; // Reference to the background Image object
+    public PlayerMovement playerMovement; // Reference to the PlayerMovement script
 
     private Vector2 initialPosition;
     private Vector2 inputDirection;
-
     private bool isDragging = false;
 
     private float handleRadius;
@@ -20,64 +15,46 @@ public class JoystickInput : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
     private void Awake()
     {
-        initialPosition = joystickBackground.position;
+        initialPosition = background.position;
 
         handleRadius = GetComponent<RectTransform>().rect.width * 0.5f;
-        maxDistance = (joystickBackground.rect.width - handleRadius) * 0.5f;
+        maxDistance = (background.rect.width - handleRadius) * 0.5f;
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        OnDrag(eventData);
+        isDragging = true;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        Vector2 input = eventData.position - initialPosition;
-        inputDirection = input.normalized;
+        if (isDragging)
+        {
+            Vector2 input = GetLocalInput(eventData);
+            inputDirection = input.normalized;
 
-        float bgRadius = joystickBackground.rect.width * 0.5f;
-        float handleRadius = joystickHandle.rect.width * 0.5f;
-        float maxDistance = bgRadius - handleRadius;
+            Vector2 handlePosition = inputDirection * maxDistance;
+            transform.localPosition = Vector2.ClampMagnitude(handlePosition, maxDistance);
 
-        Vector2 handlePosition = inputDirection * maxDistance;
-        transform.localPosition = handlePosition;
-
-        playerMovement.SetMovementDirection(inputDirection);
-        isDragging = true;
-    }    
-    
+            playerMovement.SetMovementDirection(inputDirection);
+        }
+    }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-
-        if (!isDragging)
+        if (isDragging)
         {
-            //Handle mouse click input without dragging
-            if(!isDragging){
-                Vector2 input = eventData.position - initialPosition;
-                inputDirection = input.normalized;
-
-                playerMovement.SetMovementDirection(inputDirection);
-            }
+            isDragging = false;
+            transform.localPosition = Vector2.zero;
+            inputDirection = Vector2.zero;
+            playerMovement.SetMovementDirection(inputDirection);
         }
-
-        isDragging = false;
-        inputDirection = Vector2.zero;
-        joystickHandle.position = initialPosition;
-        playerMovement.SetMovementDirection(inputDirection);
     }
 
-
-    // Start is called before the first frame update
-    void Start()
+    private Vector2 GetLocalInput(PointerEventData eventData)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Vector2 localPos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(background, eventData.position, null, out localPos);
+        return localPos;
     }
 }

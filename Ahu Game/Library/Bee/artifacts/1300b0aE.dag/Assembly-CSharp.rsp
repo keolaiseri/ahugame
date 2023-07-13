@@ -380,6 +380,13 @@
 -r:"Library/Bee/artifacts/1300b0aE.dag/UnityEngine.UI.ref.dll"
 "Assets/Scripts/JoystickInput.cs"
 "Assets/Scripts/PlayerMovement.cs"
+"Assets/UI/Joystick Pack/Examples/JoystickPlayerExample.cs"
+"Assets/UI/Joystick Pack/Examples/JoystickSetterExample.cs"
+"Assets/UI/Joystick Pack/Scripts/Base/Joystick.cs"
+"Assets/UI/Joystick Pack/Scripts/Joysticks/DynamicJoystick.cs"
+"Assets/UI/Joystick Pack/Scripts/Joysticks/FixedJoystick.cs"
+"Assets/UI/Joystick Pack/Scripts/Joysticks/FloatingJoystick.cs"
+"Assets/UI/Joystick Pack/Scripts/Joysticks/VariableJoystick.cs"
 -langversion:9.0
 
 /deterministic

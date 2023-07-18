@@ -380,6 +380,7 @@
 -r:"Library/Bee/artifacts/1300b0aE.dag/UnityEngine.UI.ref.dll"
 "Assets/Scripts/CameraFollow.cs"
 "Assets/Scripts/CropManager.cs"
+"Assets/Scripts/CropScript.cs"
 "Assets/Scripts/JoystickInput.cs"
 "Assets/Scripts/PlayerMovement.cs"
 "Assets/UI/Joystick Pack/Examples/JoystickPlayerExample.cs"
